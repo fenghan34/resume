@@ -326,23 +326,5 @@
         </div>
       </section>
     </div>
-
-
-    <script>
-      async function updateStars(){
-        await Promise.all(
-          Array.from(document.querySelectorAll('[data-gh-api]'))
-            .map(async (e) => {
-              const api = e.dataset.ghApi
-              const r = await fetch(api)
-              const json = await r.json()
-              if (json.stargazers_count)
-                e.innerText = json.stargazers_count
-              console.info(`${api} - ${json.stargazers_count}`)
-            })
-        )
-      }
-      window.addEventListener('load', updateStars)
-    </script>
   </body>
 </html>
