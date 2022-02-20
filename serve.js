@@ -1,41 +1,53 @@
 #!/usr/bin/node
-//
-// This script will run a local development server. This is useful when
-// developing the theme.
-//
-// Usage:
-// `serve.js` to use the default JSONResume example
-// `serve.js <filename>` to open a particular resume file
 
-var http = require('http')
-var fs = require('fs')
-var args = require('optimist').argv
+const http = require('http')
+const open = require('open')
+const { getResumeByRequestUrl } = require('./utils/get-resume')
+const { render } = require('./index')
+const config = require('./utils/parse-config')()
 
-var port = 8888
+async function serve({ devServer, source }) {
+  const server = http.createServer(async (req, res) => {
+    const resume = await getResumeByRequestUrl(req.url)
 
-http
-  .createServer(async function (req, res) {
-    if (req.url === '/') {
+    if (resume instanceof Object) {
+      let htmlStr = ''
+
+      try {
+        htmlStr = await render(resume)
+      } catch (e) {
+        console.error(e.message || e)
+      }
+
       res.writeHead(200, {
         'Content-Type': 'text/html',
       })
-      res.end(await render())
+
+      res.end(htmlStr)
+    } else {
+      res.statusCode = 404
+      res.end()
     }
   })
-  .listen(port)
 
-console.log('Preview: http://localhost:8888/')
-console.log('Serving..')
+  server.listen(devServer.port, async () => {
+    const urls = Object.keys(source).map(
+      (lang) => `http://localhost:${devServer.port}/${lang}`
+    )
 
-async function render() {
-  try {
-    var resume = args._.length
-      ? JSON.parse(fs.readFileSync(args._[0], 'utf8'))
-      : require('resume-schema').resumeJson
+    if (devServer.open) {
+      await Promise.all(urls.map(open))
+    }
 
-    return await require('./index.js').render(resume)
-  } catch (e) {
-    console.log(e.message)
-    return ''
-  }
+    console.log(
+      `Server is running...\nYou can check out blow:\n${urls.join('\n')}`
+    )
+  })
+}
+
+try {
+  serve(config)
+} catch (e) {
+  console.error(e)
+  process.exit(1)
 }

@@ -1,56 +1,56 @@
 const fs = require('fs-extra')
+const path = require('path')
 const puppeteer = require('puppeteer')
+const { getAllResume } = require('./utils/get-resume')
+const { render } = require('./index')
+const config = require('./utils/parse-config')()
 
-async function buildHTML() {
-  await fs.remove('./dist')
-  await fs.ensureDir('./dist')
+const distDir = path.join(process.cwd(), config.outputDir || 'dist')
 
-  let resume
-
-  if (fs.existsSync('./resume.json')) {
-    console.log(`Loading from locale "resume.json"`)
-    resume = JSON.parse(fs.readFileSync('./resume.json', 'utf-8'))
-  }
-
-  console.log('Rendering...')
-  const html = await require('./index.js').render(resume)
-  console.log('Saving file...')
-  fs.writeFileSync('./dist/index.html', html, 'utf-8')
-  console.log('Done')
-  return html
-}
-
-async function buildPDF(html) {
+async function genPDF(html) {
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
-  console.log('Opening puppeteer...')
+
   await page.setContent(html, { waitUntil: 'networkidle0' })
-  console.log('Generating PDF...')
-  const pdf = await page.pdf({
-    format: 'A4',
-    displayHeaderFooter: false,
-    printBackground: true,
-    margin: {
-      top: '0.4in',
-      bottom: '0.4in',
-      left: '0.4in',
-      right: '0.4in',
-    },
-  })
+
+  const pdf = await page.pdf(config.pdfOptions)
   await browser.close()
-  console.log('Saving file...')
-  fs.writeFileSync('./dist/resume.pdf', pdf)
-  console.log('Done')
+
   return pdf
 }
 
-async function buildAll() {
-  const html = await buildHTML()
-  await buildPDF(html)
+async function clearDist() {
+  await fs.remove(distDir)
+  await fs.ensureDir(distDir)
 }
 
-buildAll()
+async function writeFile(file, filename) {
+  const filePath = path.join(distDir, `${filename}`)
+  await fs.writeFile(filePath, file, { encoding: 'utf-8' })
+}
+
+async function build() {
+  console.log('Clear dist...')
+  await clearDist()
+
+  console.log('Get resources...')
+  const allResume = await getAllResume()
+
+  console.log('Build...')
+  return await Promise.all(
+    allResume.map(async ({ lang, resume }) => {
+      const html = await render(resume)
+      await writeFile(html, `${lang}.html`)
+
+      const pdf = await genPDF(html)
+      await writeFile(pdf, `${lang}.pdf`)
+    })
+  )
+}
+
+build()
   .then(() => {
+    console.log('Done.')
     process.exit(0)
   })
   .catch((e) => {
