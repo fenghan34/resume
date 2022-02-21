@@ -1,8 +1,7 @@
 /** @type {import('./resume.config').Config} */
 const config = {
   source: {
-    zh: 'resume.zh.json',
-    en: 'resume.en.json',
+    zh: 'https://gist.githubusercontent.com/fenghan34/b2143ef804b6d074cdf17cbe29e60695/raw/a84d1acc70e1083695fcc78821b98a512903c1f0/resume.zh.json',
   },
   devServer: {
     port: 8000,
