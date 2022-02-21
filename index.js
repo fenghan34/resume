@@ -99,7 +99,9 @@ async function getRepoStars(url) {
   }
 }
 
-async function render(resume) {
+async function render(resume, { lang }) {
+  moment.locale(lang)
+
   var css = fs.readFileSync(__dirname + '/assets/css/theme.css', 'utf-8'),
     template = fs.readFileSync(__dirname + '/resume.hbs', 'utf-8'),
     profiles = resume.basics.profiles,
@@ -125,6 +127,10 @@ async function render(resume) {
     ],
     date_format = 'MMM YYYY'
 
+  const keywords = JSON.parse(
+    fs.readFileSync(`${__dirname}/locale/${lang}.json`, 'utf-8')
+  )
+
   if (!resume.basics.picture && hasEmail(resume)) {
     resume.basics.picture = gravatar.url(
       resume.basics.email.replace('(at)', '@'),
@@ -137,7 +143,9 @@ async function render(resume) {
   }
 
   if (resume.languages) {
-    resume.basics.languages = _.pluck(resume.languages, 'language').join(', ')
+    resume.basics.languages = _.pluck(resume.languages, 'language').join(
+      keywords.comma
+    )
   }
 
   _.each(resume.work, function (work_info) {
@@ -236,7 +244,7 @@ async function render(resume) {
   })
 
   Handlebars.registerHelper('join', function (arr) {
-    return arr.join(', ')
+    return arr.join(keywords.comma)
   })
 
   Handlebars.registerHelper('getGithubApi', getGithubApi)
@@ -252,8 +260,9 @@ async function render(resume) {
   })
 
   return Handlebars.compile(template)({
-    css: css,
-    resume: resume,
+    css,
+    resume,
+    keywords,
   })
 }
 

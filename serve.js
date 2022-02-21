@@ -6,7 +6,9 @@ const { getResumeByRequestUrl } = require('./utils/get-resume')
 const { render } = require('./index')
 const config = require('./utils/parse-config')()
 
-async function serve({ devServer, source }) {
+async function serve(config) {
+  const { devServer, source } = config
+
   const server = http.createServer(async (req, res) => {
     const resume = await getResumeByRequestUrl(req.url)
 
@@ -14,7 +16,7 @@ async function serve({ devServer, source }) {
       let htmlStr = ''
 
       try {
-        htmlStr = await render(resume)
+        htmlStr = await render(resume, { lang: req.url.slice(1) })
       } catch (e) {
         console.error(e.message || e)
       }
