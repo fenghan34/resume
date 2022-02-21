@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "dev": "concurrently \"npx grunt watch\" \"node ./serve.js\"",
+    "dev": "concurrently \"pnpx grunt watch\" \"node ./serve.js\"",
     "build": "grunt less && node ./build.js"
   },
   "dependencies": {
@@ -29,5 +29,9 @@
     "less": "^3.12.2",
     "open": "^8.4.0",
     "underscore.string": "^3.3.5"
+  },
+  "engines": {
+    "node": "16.x",
+    "pnpm": "6.x"
   }
 }

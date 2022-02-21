@@ -30,10 +30,10 @@ async function writeFile(file, filename) {
 }
 
 async function build() {
-  console.log('Clear dist...')
+  console.log('Clear...')
   await clearDist()
 
-  console.log('Get resources...')
+  console.log('Parse resources...')
   const allResume = await getAllResume()
 
   console.log('Build...')

@@ -2,7 +2,12 @@ const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
 const validateResume = require('./validate-resume')
+const assert = require('assert')
 const config = require('./parse-config')()
+
+function validateSourceCallback(source, err, valid) {
+  assert(!err && valid, `Invalid resume source: ${source}`)
+}
 
 async function getResumeBySource(source) {
   let resume = null
@@ -28,11 +33,10 @@ async function getResumeByRequestUrl(requestUrl) {
   const specifiedLangSource = config.source[requestUrl.slice(1)]
   const resume = await getResumeBySource(specifiedLangSource)
 
-  try {
-    await validateResume(resume, specifiedLangSource)
-  } catch (e) {
-    console.error(e)
-  }
+  await validateResume(
+    resume,
+    validateSourceCallback.bind(null, specifiedLangSource)
+  )
 
   return resume
 }
@@ -40,10 +44,17 @@ async function getResumeByRequestUrl(requestUrl) {
 async function getAllResume() {
   const res = []
 
-  for (const [lang, s] of Object.entries(config.source)) {
+  for (const [lang, source] of Object.entries(config.source)) {
+    const resume = await getResumeBySource(source)
+
+    await validateResume(
+      resume,
+      validateSourceCallback.bind(null, config.source[lang])
+    )
+
     res.push({
       lang,
-      resume: await getResumeBySource(s),
+      resume,
     })
   }
 

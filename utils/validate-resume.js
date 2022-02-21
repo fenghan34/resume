@@ -1,11 +1,12 @@
 const { promisify } = require('util')
 const resumeSchema = require('resume-schema')
 
-async function validateResume(resume, specifiedLangSource) {
-  const valid = await promisify(resumeSchema.validate)(resume)
-
-  if (!valid) {
-    throw new Error(`Invalid resume source: ${specifiedLangSource}`)
+async function validateResume(resume, callback) {
+  try {
+    const { valid } = await promisify(resumeSchema.validate)(resume)
+    callback(null, valid)
+  } catch (e) {
+    callback(e)
   }
 }
 

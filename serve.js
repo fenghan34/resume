@@ -40,7 +40,7 @@ async function serve({ devServer, source }) {
     }
 
     console.log(
-      `Server is running...\nYou can check out blow:\n${urls.join('\n')}`
+      `Server is running...\nYou can check out below:\n${urls.join('\n')}`
     )
   })
 }
