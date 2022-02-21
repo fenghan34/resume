@@ -13,7 +13,7 @@ async function genPDF(html) {
 
   await page.setContent(html, { waitUntil: 'networkidle0' })
 
-  const pdf = await page.pdf(config.pdfOptions)
+  const pdf = await page.pdf(config.PDFOptions)
   await browser.close()
 
   return pdf

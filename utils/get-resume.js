@@ -16,14 +16,13 @@ async function getResumeBySource(source) {
     return resume
   }
 
-  if (/.\.json/.test(source)) {
+  if (/^http/.test(source)) {
+    const { data } = await axios.get(source)
+    resume = data
+  } else if (/.\.json$/.test(source)) {
     const resumePath = path.join(process.cwd(), source)
     const resumeJson = fs.readFileSync(resumePath)
     resume = JSON.parse(resumeJson)
-  }
-
-  if (/^http/.test(source)) {
-    resume = await axios.get(source)
   }
 
   return resume

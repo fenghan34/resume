@@ -11,13 +11,14 @@ function parseConfig() {
     )
   }
 
-  const { devServer, source } = require(configPath)
+  const { devServer, source, ...rest } = require(configPath)
 
   if (!source || Object.values(source).filter(Boolean).length === 0) {
     throw new Error('Please specify at least one resume source.')
   }
 
   return {
+    ...rest,
     source,
     devServer: { port: 3000, open: false, ...devServer },
   }
