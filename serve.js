@@ -7,6 +7,8 @@ const open = require('open')
 const { getResumeByLanguage } = require('./utils/get-resume')
 const { render } = require('./index')
 const { genPDF } = require('./utils/gen-pdf')
+const fs = require('fs')
+const path = require('path')
 const config = require('./utils/parse-config')()
 const { devServer, source, PDFOptions } = config
 
@@ -14,7 +16,24 @@ const app = express()
 const server = http.createServer(app)
 
 const languages = Object.keys(source)
-const cache = new Map()
+
+const cache = (function () {
+  const cacheInner = new Map()
+
+  Object.entries(source).forEach(([lang, source]) => {
+    const sourcePath = path.join(process.cwd(), source)
+    fs.stat(sourcePath, (err, stats) => {
+      if (!err && stats.isFile()) {
+        fs.watch(sourcePath, () => {
+          cacheInner.delete(`/${lang}`)
+          cacheInner.delete(`/${lang}/pdf`)
+        })
+      }
+    })
+  })
+
+  return cacheInner
+})()
 
 async function genHtmlByLanguage(lang) {
   const resume = await getResumeByLanguage(lang)

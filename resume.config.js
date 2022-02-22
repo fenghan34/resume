@@ -2,7 +2,7 @@
 const config = {
   source: {
     'zh-CN': 'resume.json',
-    en: 'resume.json',
+    en: 'xxx',
   },
   devServer: {
     port: 8000,
