@@ -3,41 +3,21 @@
 const http = require('http')
 const express = require('express')
 const open = require('open')
-
 const { getResumeByLanguage } = require('./utils/get-resume')
 const { render } = require('./index')
 const { genPDF } = require('./utils/gen-pdf')
-const fs = require('fs')
-const path = require('path')
 const config = require('./utils/parse-config')()
-const { devServer, source, PDFOptions } = config
+const { socketPort, broadcast } = require('./socket')()
 
+const cache = new Map()
 const app = express()
 const server = http.createServer(app)
-
 const languages = Object.keys(source)
-
-const cache = (function () {
-  const cacheInner = new Map()
-
-  Object.entries(source).forEach(([lang, source]) => {
-    const sourcePath = path.join(process.cwd(), source)
-    fs.stat(sourcePath, (err, stats) => {
-      if (!err && stats.isFile()) {
-        fs.watch(sourcePath, () => {
-          cacheInner.delete(`/${lang}`)
-          cacheInner.delete(`/${lang}/pdf`)
-        })
-      }
-    })
-  })
-
-  return cacheInner
-})()
+const { devServer, source, PDFOptions } = config
 
 async function genHtmlByLanguage(lang) {
   const resume = await getResumeByLanguage(lang)
-  return await render(resume, { lang })
+  return await render(resume, { lang, socketPort, config })
 }
 
 async function getPDFByLanguage(lang) {
@@ -45,10 +25,11 @@ async function getPDFByLanguage(lang) {
   return await genPDF(html, PDFOptions)
 }
 
+require('./watcher')({ config, cache, broadcast })
+
 app.get('*', (req, res, next) => {
   if (cache.has(req.url)) {
-    res.send(cache.get(req.url))
-    return
+    return res.send(cache.get(req.url))
   }
 
   next()

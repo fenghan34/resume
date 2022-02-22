@@ -23,6 +23,7 @@ specifiers:
   tarball-extract: 0.0.6
   underscore: ^1.11.0
   underscore.string: ^3.3.5
+  ws: ^8.5.0
 
 dependencies:
   axios: 0.26.0
@@ -36,6 +37,7 @@ dependencies:
   resume-schema: 1.0.0
   tarball-extract: 0.0.6
   underscore: 1.13.2
+  ws: 8.5.0
 
 devDependencies:
   concurrently: 7.0.0

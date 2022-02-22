@@ -3,9 +3,10 @@ const path = require('path')
 const { getAllResume } = require('./utils/get-resume')
 const { render } = require('./index')
 const { genPDF } = require('./utils/gen-pdf')
+const { resolvePath } = require('./utils')
 const config = require('./utils/parse-config')()
 
-const distDir = path.join(process.cwd(), config.outputDir || 'dist')
+const distDir = resolvePath(config.outputDir || 'dist')
 
 async function clearDist() {
   await fs.remove(distDir)

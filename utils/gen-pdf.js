@@ -11,5 +11,4 @@ async function genPDF(html, options) {
 
   return pdf
 }
-
 module.exports = { genPDF }

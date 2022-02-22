@@ -275,5 +275,23 @@
         </div>
       </section>
     </div>
+
+    {{#if context.socketPort}}
+    <script>
+      const ws = new WebSocket(`ws://localhost:{{context.socketPort}}`)
+
+      ws.addEventListener('message', (e) => {
+        const needRefreshPages = JSON.parse(e.data)
+
+        if (needRefreshPages.indexOf(location.href)) {
+          location.reload()
+        }
+      })
+
+      window.onclose(() => {
+        ws.close()
+      })
+    </script>
+    {{/if}}
   </body>
 </html>

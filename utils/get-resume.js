@@ -1,8 +1,8 @@
 const fs = require('fs')
-const path = require('path')
 const axios = require('axios')
 const validateResume = require('./validate-resume')
 const assert = require('http-assert')
+const { resolvePath } = require('.')
 const config = require('./parse-config')()
 
 function validateSourceCallback(source, err, valid) {
@@ -18,7 +18,7 @@ async function getResumeBySource(source) {
     const { data } = await axios.get(source)
     resume = data
   } else if (/.\.json$/.test(source)) {
-    const resumePath = path.join(process.cwd(), source)
+    const resumePath = resolvePath(source)
     const resumeJson = fs.readFileSync(resumePath)
     resume = JSON.parse(resumeJson)
   }

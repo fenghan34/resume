@@ -99,8 +99,8 @@ async function getRepoStars(url) {
   }
 }
 
-async function render(resume, { lang }) {
-  moment.locale(lang)
+async function render(resume, context) {
+  moment.locale(context.lang)
 
   var css = fs.readFileSync(__dirname + '/assets/css/theme.css', 'utf-8'),
     template = fs.readFileSync(__dirname + '/resume.hbs', 'utf-8'),
@@ -128,7 +128,7 @@ async function render(resume, { lang }) {
     date_format = 'MMM YYYY'
 
   const locales = JSON.parse(
-    fs.readFileSync(`${__dirname}/locale/${lang}.json`, 'utf-8')
+    fs.readFileSync(`${__dirname}/locale/${context.lang}.json`, 'utf-8')
   )
 
   if (!resume.basics.picture && hasEmail(resume)) {
@@ -263,6 +263,7 @@ async function render(resume, { lang }) {
     css,
     resume,
     locales,
+    context,
   })
 }
 

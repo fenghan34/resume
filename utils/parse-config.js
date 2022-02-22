@@ -1,9 +1,9 @@
-const path = require('path')
 const fs = require('fs')
+const { resolvePath } = require('.')
 
 function parseConfig() {
   const configFileName = 'resume.config.js'
-  const configPath = path.join(process.cwd(), configFileName)
+  const configPath = resolvePath(configFileName)
 
   if (!fs.existsSync(configPath)) {
     throw new Error(
