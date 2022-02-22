@@ -127,7 +127,7 @@ async function render(resume, { lang }) {
     ],
     date_format = 'MMM YYYY'
 
-  const keywords = JSON.parse(
+  const locales = JSON.parse(
     fs.readFileSync(`${__dirname}/locale/${lang}.json`, 'utf-8')
   )
 
@@ -144,7 +144,7 @@ async function render(resume, { lang }) {
 
   if (resume.languages) {
     resume.basics.languages = _.pluck(resume.languages, 'language').join(
-      keywords.comma
+      locales.comma
     )
   }
 
@@ -244,7 +244,7 @@ async function render(resume, { lang }) {
   })
 
   Handlebars.registerHelper('join', function (arr) {
-    return arr.join(keywords.comma)
+    return arr.join(locales.comma)
   })
 
   Handlebars.registerHelper('getGithubApi', getGithubApi)
@@ -262,7 +262,7 @@ async function render(resume, { lang }) {
   return Handlebars.compile(template)({
     css,
     resume,
-    keywords,
+    locales,
   })
 }
 

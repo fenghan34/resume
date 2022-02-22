@@ -2,19 +2,17 @@ const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
 const validateResume = require('./validate-resume')
-const assert = require('assert')
+const assert = require('http-assert')
 const config = require('./parse-config')()
 
 function validateSourceCallback(source, err, valid) {
-  assert(!err && valid, `Invalid resume source: ${source}`)
+  assert(!err && valid, 400, err || `Invalid resume source: ${source}.`)
 }
 
 async function getResumeBySource(source) {
-  let resume = null
+  assert(typeof source === 'string', 404, 'Not Found.')
 
-  if (typeof source !== 'string') {
-    return resume
-  }
+  let resume = null
 
   if (/^http/.test(source)) {
     const { data } = await axios.get(source)
@@ -25,17 +23,16 @@ async function getResumeBySource(source) {
     resume = JSON.parse(resumeJson)
   }
 
+  assert(resume instanceof Object, 404, 'Not Found.')
   return resume
 }
 
-async function getResumeByRequestUrl(requestUrl) {
-  const specifiedLangSource = config.source[requestUrl.slice(1)]
+async function getResumeByLanguage(language) {
+  const specifiedLangSource = config.source[language]
   const resume = await getResumeBySource(specifiedLangSource)
 
-  await validateResume(
-    resume,
-    validateSourceCallback.bind(null, specifiedLangSource)
-  )
+  const cb = validateSourceCallback.bind(null, specifiedLangSource)
+  await validateResume(resume, cb)
 
   return resume
 }
@@ -46,18 +43,13 @@ async function getAllResume() {
   for (const [lang, source] of Object.entries(config.source)) {
     const resume = await getResumeBySource(source)
 
-    await validateResume(
-      resume,
-      validateSourceCallback.bind(null, config.source[lang])
-    )
+    const cb = validateSourceCallback.bind(null, config.source[lang])
+    await validateResume(resume, cb)
 
-    res.push({
-      lang,
-      resume,
-    })
+    res.push({ lang, resume })
   }
 
   return res
 }
 
-module.exports = { getResumeBySource, getResumeByRequestUrl, getAllResume }
+module.exports = { getResumeBySource, getResumeByLanguage, getAllResume }

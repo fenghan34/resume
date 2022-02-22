@@ -1,23 +1,11 @@
 const fs = require('fs-extra')
 const path = require('path')
-const puppeteer = require('puppeteer')
 const { getAllResume } = require('./utils/get-resume')
 const { render } = require('./index')
+const { genPDF } = require('./utils/gen-pdf')
 const config = require('./utils/parse-config')()
 
 const distDir = path.join(process.cwd(), config.outputDir || 'dist')
-
-async function genPDF(html) {
-  const browser = await puppeteer.launch({ headless: true })
-  const page = await browser.newPage()
-
-  await page.setContent(html, { waitUntil: 'networkidle0' })
-
-  const pdf = await page.pdf(config.PDFOptions)
-  await browser.close()
-
-  return pdf
-}
 
 async function clearDist() {
   await fs.remove(distDir)
@@ -39,10 +27,10 @@ async function build() {
   console.log('Build...')
   return await Promise.all(
     allResume.map(async ({ lang, resume }) => {
-      const html = await render(resume)
+      const html = await render(resume, { lang })
       await writeFile(html, `${lang}.html`)
 
-      const pdf = await genPDF(html)
+      const pdf = await genPDF(html, config.PDFOptions)
       await writeFile(pdf, `${lang}.pdf`)
     })
   )

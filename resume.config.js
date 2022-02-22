@@ -2,10 +2,11 @@
 const config = {
   source: {
     'zh-CN': 'resume.json',
+    en: 'resume.json',
   },
   devServer: {
     port: 8000,
-    open: true,
+    open: false,
   },
   outputDir: 'dist',
   PDFOptions: {
