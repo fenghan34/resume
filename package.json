@@ -35,9 +35,5 @@
     "less": "^3.12.2",
     "open": "^8.4.0",
     "underscore.string": "^3.3.5"
-  },
-  "engines": {
-    "node": "16.x",
-    "pnpm": "6.x"
   }
 }
