@@ -5,9 +5,14 @@
   "projects": "项目经验",
   "stacks": "技术栈",
   "education": "教育程度",
+  "currentlyPursuing": "在读",
   "languages": "语言程度",
   "present": "至今",
   "pdfVersion": "PDF 版本",
   "lastModified": "上次修改时间 ",
+  "onlineVersion": "在线版本",
+  "nextVersion": "English Version",
+  "dateFormat": "YYYY 年 MMM",
+  "buildDateFormat": "YYYY 年 MMM a H:mm:ss",
   "comma": "，"
 }

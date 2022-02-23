@@ -18,9 +18,15 @@ function parseConfig() {
   }
 
   return {
-    ...rest,
     source,
-    devServer: { port: 3000, open: false, ...devServer },
+    devServer: { port: 3333, socketPort: 4444, open: false, ...devServer },
+    ...{
+      outputDir: 'dist',
+      localeDir: 'locale',
+      styleFile: 'theme.css',
+      templateFile: 'template.hbs',
+    },
+    ...rest,
   }
 }
 

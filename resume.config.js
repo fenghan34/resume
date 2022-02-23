@@ -1,13 +1,17 @@
-/** @type {import('./resume.config').Config} */
+/** @type {import('./src/resume.config').Config} */
 const config = {
   source: {
     'zh-CN': 'resume.json',
   },
   devServer: {
+    socketPort: 8888,
     port: 8000,
     open: false,
   },
   outputDir: 'dist',
+  localeDir: 'locale',
+  styleFile: 'styles/css/theme.css',
+  templateFile: 'template.hbs',
   PDFOptions: {
     format: 'A4',
     displayHeaderFooter: false,

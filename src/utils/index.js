@@ -9,12 +9,12 @@ function genPreviewUrlsByLanguage(lang) {
   return [`/${lang}`, `/${lang}/pdf`]
 }
 
-function watchFile(filename, callback) {
+function watch(filename, options, callback) {
   fs.watch(resolvePath(filename), callback)
 }
 
-function watchDir(dir, callback) {
-  fs.watch(resolvePath(dir), { recursive: true }, callback)
+function read(filename) {
+  return fs.readFileSync(resolvePath(filename), 'utf-8')
 }
 
-module.exports = { resolvePath, watchFile, watchDir, genPreviewUrlsByLanguage }
+module.exports = { resolvePath, watch, read, genPreviewUrlsByLanguage }

@@ -5,10 +5,14 @@
   "projects": "Projects",
   "stacks": "Stacks",
   "education": "Education",
+  "currentlyPursuing": "Currently Pursuing",
   "languages": "Languages",
   "present": "Present",
   "pdfVersion": "PDF Version",
-  "onlineVersion": "Online Version",
   "lastModified": "Last updated at ",
+  "onlineVersion": "Online Version",
+  "nextVersion": "中文版",
+  "dateFormat": "MMM YYYY",
+  "buildDateFormat": "MMMM Do YYYY, h:mm:ss a",
   "comma": ", "
 }

@@ -4,13 +4,13 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     less: {
       compile: {
-        src: './assets/less/theme.less',
-        dest: './assets/css/theme.css',
+        src: './styles/less/theme.less',
+        dest: './styles/css/theme.css',
       },
     },
     watch: {
       styles: {
-        files: ['assets/less/**/*.less'],
+        files: ['styles/less/**/*.less'],
         tasks: ['less'],
         options: {
           nospawn: true,

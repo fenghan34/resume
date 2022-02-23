@@ -1,7 +1,7 @@
 const { WebSocketServer } = require('ws')
 
-function initSocketServer() {
-  const socketPort = 8009
+function initSocketServer(config) {
+  const socketPort = config.devServer.socketPort || 8008
   const socket = new WebSocketServer({ port: socketPort })
 
   function broadcast(data) {
