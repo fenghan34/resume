@@ -22,9 +22,7 @@ const serve = (config) => {
     next()
   })
 
-  const languages = Object.keys(config.source)
-
-  languages.forEach((lang) => {
+  config.languages.forEach((lang) => {
     app.get(`/${lang}/pdf`, async (req, res, next) => {
       try {
         const data = await getPDFByLanguage(lang, context)
@@ -63,7 +61,7 @@ const serve = (config) => {
       return [base, `${base}/pdf`]
     }
 
-    const urls = languages.map(cb).flat(1)
+    const urls = config.languages.map(cb).flat(1)
 
     if (devServer.open) {
       // open browser

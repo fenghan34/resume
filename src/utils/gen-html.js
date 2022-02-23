@@ -54,9 +54,25 @@ function getUrlFromUsername(site, username) {
   }
 }
 
+function getNextLanguageVersionUrl(current, languages, isPDF) {
+  if (languages.length <= 1) return
+
+  const index = languages.findIndex((lang) => lang === current)
+
+  const nextLang = languages[index === languages.length - 1 ? 0 : index + 1]
+
+  return isPDF ? `./${nextLang}/pdf` : `./${nextLang}`
+}
+
 async function genHTML(resume, context) {
-  const { config, lang } = context
-  const { templateFile, styleFile } = config
+  const { config, lang, isPDF } = context
+  const { templateFile, styleFile, languages } = config
+
+  context.nextLanguageVersionUrl = getNextLanguageVersionUrl(
+    lang,
+    languages,
+    isPDF
+  )
 
   moment.locale(lang)
 
@@ -177,9 +193,9 @@ async function genHTML(resume, context) {
   })
 }
 
-async function genHtmlByLanguage(lang, context) {
+async function genHtmlByLanguage(lang, context, isPDF = false) {
   const resume = await getResumeByLanguage(lang)
-  return await genHTML(resume, { ...context, lang })
+  return await genHTML(resume, { ...context, lang, isPDF })
 }
 
 module.exports = { genHTML, genHtmlByLanguage }

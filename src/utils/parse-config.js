@@ -27,6 +27,7 @@ function parseConfig() {
       templateFile: 'template.hbs',
     },
     ...rest,
+    languages: Object.keys(source),
   }
 }
 

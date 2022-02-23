@@ -2,6 +2,7 @@
 const config = {
   source: {
     'zh-CN': 'resume.json',
+    en: 'resume.en.json',
   },
   devServer: {
     socketPort: 8888,

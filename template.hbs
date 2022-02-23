@@ -63,7 +63,7 @@
                 {{#profiles}}
                   <a class="social-link icon" href="{{url}}" target="_blank">
                     <span class="iconify" data-icon="{{toSocialIcon network}}"></span>
-                    <span class="social-link-text print-only">{{username}}</span>
+                    {{!-- <span class="social-link-text print-only">{{username}}</span> --}}
                   </a>
                 {{/profiles}}
               </div>
@@ -157,13 +157,17 @@
 
             <div style="text-align:center">
               <div class="detail no-print" style="font-size:1.5rem;margin-top:2rem;">
-                <a href="https://resume.fenghan.link/resume.pdf" class="info" itemprop="pdf" target="_blank">
+                <a href="./{{context.lang}}/pdf" class="info" itemprop="pdf" target="_blank">
                   {{locales.pdfVersion}}
                 </a>
+                {{#if context.nextLanguageVersionUrl}}<a style="
+                margin-left:1rem" href="{{context.nextLanguageVersionUrl}}" class="info" itemprop="next" target="_blank">
+                  {{locales.nextVersion}}
+                </a>{{/if}}
               </div>
 
                <div class="detail print-only" style="font-size:1.5rem;margin-top:2rem;" >
-                <a href="https://resume.fenghan.link" class="info" itemprop="pdf" target="_blank">
+                <a href="https://resume.fenghan.link/{{context.lang}}" class="info" itemprop="online" target="_blank">
                   {{locales.onlineVersion}}
                 </a>
               </div>

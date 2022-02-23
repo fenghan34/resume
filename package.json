@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "dev": "concurrently \"grunt watch\" \"cv dev\"",
-    "build": "grunt less && cv build"
+    "dev": "grunt less && concurrently \"grunt watch\" \"./src/bin/index.js dev\"",
+    "build": "grunt less && ./src/bin/index.js build"
   },
   "bin": {
     "cv": "./src/bin/index.js"

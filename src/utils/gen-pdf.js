@@ -14,7 +14,7 @@ async function genPDF(html, context) {
 }
 
 async function getPDFByLanguage(lang, context) {
-  const html = await genHtmlByLanguage(lang, context)
+  const html = await genHtmlByLanguage(lang, context, true)
   return await genPDF(html, context)
 }
 
