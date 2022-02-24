@@ -9,10 +9,11 @@ const config = {
     port: 8000,
     open: false,
   },
-  outputDir: 'dist',
+  outputDir: '../my-resume/dist',
   localeDir: 'locale',
   styleFile: 'styles/css/theme.css',
   templateFile: 'template.hbs',
+  domain: 'https://resume.fenghan.link/',
   PDFOptions: {
     format: 'A4',
     displayHeaderFooter: false,
