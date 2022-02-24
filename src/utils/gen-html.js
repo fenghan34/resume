@@ -181,6 +181,8 @@ async function genHTML(resume, context) {
     return new Handlebars.SafeString(text)
   })
 
+  Handlebars.registerHelper('locales', (key) => locales[key])
+
   Handlebars.registerHelper('getBuildDate', () =>
     moment().format(locales.buildDateFormat || 'MMMM Do YYYY, h:mm:ss a')
   )

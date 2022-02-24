@@ -60,4 +60,9 @@ export type Config = Readonly<{
    * Specify PDF generator options
    */
   PDFOptions?: PDFOptions
+
+  /**
+   *  Specify the domain of online version
+   */
+  domain: string
 }>
