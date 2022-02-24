@@ -23,8 +23,7 @@
                 <!--<div class="profile-pic">
                   <img class="media-object img-circle center-block"  data-src="holder.js/100x100"
                     alt="{{name}}" src="{{picture}}" itemprop="image">
-                </div>
-                -->
+                </div>-->
                 <div class="contact-details">
                   <div class="name-and-profession">
                     <h3 class="text-bolder name" itemprop="name"> {{name}}</h3>
@@ -107,6 +106,37 @@
                     {{/if}}
                   </div>
 
+                </li>
+              {{/each}}
+            </ul>
+
+            <h4> <span class="title">{{locales 'projectExperience'}}</span></h4>
+            <ul class="list-unstyled">
+              {{#each resume.projects}}
+                <li class="card-nested relax">
+                  <div class="content has-sidebar">
+                    <p class="clear-margin-sm">
+                      <strong>{{name}}</strong>
+                      {{#if roles}}
+                        {{#each roles}}
+                          <span class="text-muted" style="margin-left: 0.3em">{{.}}</span>
+                        {{/each}}
+                      {{/if}}
+                    </p>
+                    <p class="text-muted">
+                      <small>
+                        <span class="space-right"> {{startDate}} - {{#if endDate}}{{endDate}}{{else}}{{locales 'present'}}{{/if}}</span>
+                      </small>
+                    </p>
+                    <p>{{description}}</p>
+                    {{#if highlights}}
+                      <ul class='highlight'>
+                        {{#each highlights}}
+                          <li> {{.}} </li>
+                        {{/each}}
+                      </ul>
+                    {{/if}}
+                  </div>
                 </li>
               {{/each}}
             </ul>

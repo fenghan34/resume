@@ -121,33 +121,26 @@ async function genHTML(resume, context) {
     )
   }
 
-  _.each(resume.work, (workInfo) => {
-    const startData = workInfo.startDate && new Date(workInfo.startDate)
-    const endDate = workInfo.endDate && new Date(workInfo.endDate)
+  const formatDataCb = (info) => {
+    _.each(['startDate', 'endDate'], (date) => {
+      const dateObj = new Date(info[date])
 
-    if (startData) {
-      workInfo.startDate = moment(startData).format(dateFormat)
-    }
+      if (info[date]) {
+        info[date] = moment(dateObj).format(dateFormat)
+      }
+    })
+  }
 
-    if (endDate) {
-      workInfo.endDate = moment(endDate).format(dateFormat)
-    }
-  })
+  _.each(resume.work, formatDataCb)
+
+  _.each(resume.projects, formatDataCb)
+
+  _.each(resume.education, formatDataCb)
 
   _.each(resume.skills, (skillInfo) => {
     if (skillInfo.level) {
       skillInfo.level = _s.capitalize(skillInfo.level.trim())
     }
-  })
-
-  _.each(resume.education, (educationInfo) => {
-    _.each(['startDate', 'endDate'], (date) => {
-      const dateObj = new Date(educationInfo[date])
-
-      if (educationInfo[date]) {
-        educationInfo[date] = moment(dateObj).format(dateFormat)
-      }
-    })
   })
 
   _.each(socialSites, (site) => {

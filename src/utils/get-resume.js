@@ -6,7 +6,11 @@ const { resolvePath } = require('.')
 const config = require('./parse-config')()
 
 function validateSourceCallback(source, err, valid) {
-  assert(!err && valid, 400, err || `Invalid resume source: ${source}.`)
+  assert(
+    !err && valid,
+    400,
+    `Invalid resume source: ${source}.\n${err ? err[0].message : ''}`
+  )
 }
 
 async function getResumeBySource(source) {
