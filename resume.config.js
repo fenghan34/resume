@@ -1,8 +1,8 @@
 /** @type {import('./src/resume.config').Config} */
 const config = {
   source: {
-    'zh-CN': 'resume.json',
-    en: 'resume.en.json',
+    'zh-CN': '../my-resume/resume.json',
+    en: '../my-resume/resume.en.json',
   },
   devServer: {
     socketPort: 8888,
