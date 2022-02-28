@@ -14,6 +14,6 @@
   "onlineVersion": "在线版本",
   "nextVersion": "English Version",
   "dateFormat": "YYYY 年 MMM",
-  "buildDateFormat": "YYYY 年 MMM a H:mm:ss",
+  "buildDateFormat": "YYYY 年 MMM DD 日 a H:mm:ss",
   "comma": "，"
 }
